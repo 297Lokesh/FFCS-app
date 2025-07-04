@@ -46,7 +46,7 @@
             const data = parseJwt(response.credential);
             console.log("User Info:", data);
             localStorage.setItem("user", JSON.stringify(data));
-            window.location.href = "Login.html";
+            window.location.href = "main.html";
         }
 
         function parseJwt(token) {

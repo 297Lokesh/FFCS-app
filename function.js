@@ -1,23 +1,29 @@
 const slotsValues = {
-  "2.0 0.0 0.0": ["A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2", "E1", "E2", "F1", "F2", "G1", "G2"],
-  "2.0 1.0 0.0": ["A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2", "E1", "E2", "F1", "F2", "G1", "G2"],
-  "2.0 0.0 1.0": ["A1", "A2", "B1", "B2", "C1", "C2", "D1", "D2", "E1", "E2", "F1", "F2", "G1", "G2"],
-  "3.0 0.0 0.0": ["A1+TA1", "A2+TA2", "B1+TB1", "B2+TB2", "C1+TC1", "C2+TC2",
-    "D1+TD1", "D2+TD2", "E1+TE1", "E2+TE2", "F1+TF1", "F2+TF2", "G1+TG1", "G2+TG2"],
+  "2.0 0.0 0.0": ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "A2", "B2", "C2", "D2", "E2", "F2", "G2"],
+  "2.0 1.0 0.0": ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "A2", "B2", "C2", "D2", "E2", "F2", "G2"],
+  "2.0 0.0 1.0": ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "A2", "B2", "C2", "D2", "E2", "F2", "G2"],
+
+  "3.0 0.0 0.0": [
+    "A1+TA1", "B1+TB1", "C1+TC1", "D1+TD1", "E1+TE1", "F1+TF1", "F1+TFF1", "G1+TG1",
+    "A2+TA2", "B2+TB2", "C2+TC2", "D2+TD2", "E2+TE2", "F2+TF2","F2+SF1", "G2+TG2"
+  ],
+
   "3.0 1.0 0.0": [
-    "A1+TA1", "A2+TA2", "B1+TB1", "B2+TB2", "C1+TC1", "C2+TC2",
-    "D1+TD1", "D2+TD2", "E1+TE1", "E2+TE2", "F1+TF1", "F2+TF2", "G1+TG1", "G2+TG2" , "F1+TFF1"
+    "A1+TA1", "B1+TB1", "C1+TC1", "D1+TD1", "E1+TE1", "F1+TF1", "F1+TFF1", "G1+TG1",
+    "A2+TA2", "B2+TB2", "C2+TC2", "D2+TD2", "E2+TE2", "F2+TF2","F2+SF1", "G2+TG2"
   ],
+
   "3.0 0.0 1.0": [
-    "A1+TA1", "A2+TA2", "B1+TB1", "B2+TB2", "C1+TC1", "C2+TC2",
-    "D1+TD1", "D2+TD2", "E1+TE1", "E2+TE2", "F1+TF1", "F2+TF2", "G1+TG1", "G2+TG2" , "F1+TFF1" 
+    "A1+TA1", "B1+TB1", "C1+TC1", "D1+TD1", "E1+TE1", "F1+TF1", "F1+TFF1", "G1+TG1",
+    "A2+TA2", "B2+TB2", "C2+TC2", "D2+TD2", "E2+TE2", "F2+TF2","F2+SF1", "G2+TG2"
   ],
+
   "4.0 0.0 0.0": [
-    "A1+TA1+TAA1", "A2+TA2+TAA2", "B1+TB1+TBB1", "B2+TB2+TBB2",
-    "C1+TC1+TCC1", "C2+TC2+TCC2", "D1+TD1+TDD1", "D2+TD2+TDD2",
-    "E1+TE1+TEE1", "E2+TE2+TEE2", "F1+TF1+TFF1", "F2+TF2+TFF2"
+    "A1+TA1+TAA1", "B1+TB1+TBB1", "C1+TC1+TCC1", "C1+SC1+TC1", "D1+TD1+TDD1", "D1+SD1+TD1", "E1+TE1+TEE1","E1+SE1+TE1","F1+TF1+TFF1","F1+SF1+TF1"
+    "A2+TA2+TAA2", "B2+TB2+TBB2", "C2+TC2+TCC2", "D2+TD2+TDD2", "E2+TE2+TEE2"
   ]
 };
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const name = localStorage.getItem("studentName") || "Not Set";

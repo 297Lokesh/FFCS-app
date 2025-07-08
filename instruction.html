@@ -11,10 +11,13 @@
       color: #333;
       padding: 40px;
     }
+
     h1 {
       color: #003366;
       margin-bottom: 20px;
+      text-align: center;
     }
+
     .instructions {
       max-width: 800px;
       margin: auto;
@@ -23,14 +26,25 @@
       padding: 30px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
+
     ul {
       text-align: left;
       font-size: 1.1em;
       line-height: 1.6em;
+      padding-left: 20px;
     }
+
     li::marker {
       color: #007bff;
     }
+
+    code {
+      background-color: #eef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
     .note {
       margin-top: 20px;
       padding: 15px;
@@ -38,6 +52,7 @@
       border-left: 4px solid #f9a825;
       font-weight: bold;
     }
+
     .container {
       display: flex;
       flex-direction: row;
@@ -45,6 +60,7 @@
       align-items: center;
       height: 100px;
     }
+
     button {
       padding: 12px 24px;
       font-size: 1em;
@@ -53,6 +69,10 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
@@ -70,27 +90,40 @@
         Please check all components carefully (e.g., T/P/L) before choosing a course.
       </li>
 
-      <li><strong>Project Registration:</strong> If you choose a project-based course (P), you must complete the work under the guidance of the <strong>specific faculty you selected</strong> at the time of registration. Choose wisely.</li>
+      <li><strong>Project Registration:</strong> If you choose a project-based course (P), you must complete the work under the guidance of the <strong>specific faculty</strong> you selected at the time of registration.</li>
 
-      <li><strong>Slot Selection:</strong> When selecting a theory and lab course, try to assign one in the <strong>forenoon (FN)</strong> and the other in the <strong>afternoon (AN)</strong>. This prevents slot clashes and improves your daily schedule.</li>
+      <li><strong>Slot Selection Tips:</strong>
+        <ul>
+          <li>You can assign <strong>theory in the morning</strong> (e.g., <code>A1</code>, <code>B1</code>) and <strong>lab in the afternoon</strong> (e.g., <code>A2</code>, <code>B2</code>).</li>
+          <li>Or vice versa — <strong>theory in the afternoon</strong> and <strong>lab in the morning</strong> — depending on availability and convenience.</li>
+          <li>This flexibility helps reduce clashes and keeps your day balanced.</li>
+        </ul>
+      </li>
 
-      <li><strong>Credit Limits:</strong> You must register for a minimum of <strong>16 credits</strong> and a maximum of <strong>27 credits</strong>. Plan based on your academic load and CGPA.</li>
+      <li><strong>Credit Limits:</strong> You must register for a minimum of <strong>16 credits</strong> and a maximum of <strong>27 credits</strong>. Choose wisely based on your workload.</li>
 
-      <li><strong>Course Prerequisites:</strong> Check the prerequisite conditions before choosing electives or advanced courses. Ensure you've completed any required subjects beforehand.</li>
+      <li><strong>Course Prerequisites:</strong> Ensure you have completed any required prerequisites before selecting electives or advanced courses.</li>
 
-      <li><strong>Registration Priority:</strong> FFCS registration time slots are assigned based on CGPA. Be ready during your allotted window, as courses may get filled quickly.</li>
+      <li><strong>Time Table Review:</strong> After registration, check your timetable in VTOP to make sure there are no slot clashes or scheduling errors.</li>
 
-      <li><strong>Time Table Review:</strong> After registration, go to VTOP and confirm that your timetable has no slot clashes or errors.</li>
+      <li><strong>Next Page Features:</strong>
+        <ul>
+          <li>You can select <strong>multiple slot options</strong> (e.g., A1, B1, etc.) for each course.</li>
+          <li>You can also <strong>delete the last added course block</strong> before generating the timetable.</li>
+        </ul>
+      </li>
+
+      <li><strong>Lab Slot Pairs:</strong> If your course includes a lab, you’ll be able to select from valid lab pairs such as <code>L2+L3</code>, <code>L4+L5</code>, or dynamically generated pairs like <code>L31+L32</code>. Only valid combinations will appear based on availability.</li>
     </ul>
 
     <div class="note">
-      ⚠️ You cannot change or withdraw a course after submission unless within the add/drop window. Choose carefully and avoid last-minute confusion!
-    </div>
-    <div class="container">
-        <a href="multi-option.html"><button > Start Registration </button></a>
-        <a href="main.html"><button style="margin-left: 10px"> Back </button></a>
+      ⚠️ Once submitted, courses cannot be changed unless during the add/drop period. Plan ahead and avoid last-minute confusion!
     </div>
 
+    <div class="container">
+      <a href="multi-option.html"><button>Start Registration</button></a>
+      <a href="main.html"><button style="margin-left: 10px">Back</button></a>
+    </div>
   </div>
 
 </body>

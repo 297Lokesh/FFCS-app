@@ -1,3 +1,11 @@
+
+document.addEventListener("DOMContentLoaded", () => {
+  
+  for (let i = 0; i < 3; i++) {
+    CoursePageAdder(); // Adds 3 more → Total 4
+  }
+});
+
 const slotsValues = {
   "2.0 0.0 0.0": ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "A2", "B2", "C2", "D2", "E2", "F2", "G2"],
   "2.0 1.0 0.0": ["A1", "B1", "C1", "D1", "E1", "F1", "G1", "A2", "B2", "C2", "D2", "E2", "F2", "G2"],
@@ -25,15 +33,7 @@ const slotsValues = {
 };
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const name = localStorage.getItem("studentName") || "Not Set";
-  const regNo = localStorage.getItem("regNo") || "Not Set";
-  const branch = localStorage.getItem("branch") || "Not Set";
 
-  document.getElementById("nav-name").textContent = name;
-  document.getElementById("nav-reg").textContent = regNo;
-  document.getElementById("nav-branch").textContent = branch;
-});
 
 
 let blockCount = 1;
@@ -244,12 +244,6 @@ function CoursePageAdder() {
   document.getElementById("course-container").appendChild(courseBlock);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Already one block exists in HTML (blockCount = 1)
-  for (let i = 0; i < 3; i++) {
-    CoursePageAdder(); // Adds 3 more → Total 4
-  }
-});
 
 function validateForm() {
   let isValid = true;

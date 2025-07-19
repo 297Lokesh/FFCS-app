@@ -1,0 +1,234 @@
+/* Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+header {
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+header h1 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #007bff;
+}
+
+header p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.course-selection,
+#timetable-section {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.course-card {
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #444;
+}
+
+.slot-selection {
+  margin-bottom: 10px;
+}
+
+.slot-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn.primary {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.btn.secondary {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn.outline {
+  background-color: transparent;
+  color: #007bff;
+  border: 2px solid #007bff;
+}
+
+.error-container {
+  color: red;
+  font-weight: bold;
+  background-color: #ffe6e6;
+  border: 1px solid red;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tab-btn {
+  padding: 8px 12px;
+  border-radius: 5px;
+  background-color: #eaeaea;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab-btn.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.timetable-container {
+  overflow-x: auto;
+}
+
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.timetable th,
+.timetable td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  vertical-align: top;
+  min-width: 100px;
+}
+
+.timetable th {
+  background-color: #f0f0f0;
+}
+
+.time-column {
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+.lunch-row {
+  background-color: #fffbe6;
+}
+
+.course-badge {
+  display: inline-block;
+  padding: 3px 6px;
+  margin: 2px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.theory-badge {
+  background-color: #e0f0ff;
+  color: #007bff;
+}
+
+.lab-badge {
+  background-color: #e0ffe0;
+  color: #28a745;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 16px;
+  z-index: 999;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.navbar-item {
+  flex: 1;
+  text-align: center;
+}
+
+/* Add top margin to content so it doesn't go under navbar */
+body {
+  margin-top: 60px; /* Adjust based on navbar height */
+}
+
+.lunch-badge {
+  background-color: #fff3cd;
+  color: #856404;
+  font-weight: bold;
+}
+
+.empty-slot {
+  color: #aaa;
+  font-style: italic;
+}

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Breakdown View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Slot Breakdown View</h1>
+        
+        <div class="instructions">
+            <p>This page helps you understand how compound slots like "A1+TA1+TAA1" are broken down and where they appear in the timetable.</p>
+            <p>Search for a specific slot below or browse all available slots.</p>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" id="slotSearch" placeholder="Enter slot (e.g. A1, TA1)">
+            <button class="search-button" onclick="searchSlot()">Search</button>
+        </div>
+        
+        <div id="searchResults"></div>
+        
+        <div class="navigation-buttons">
+            <button class="nav-button" onclick="window.location.href='index.html'">Back to Course Selection</button>
+            <button class="nav-button" onclick="window.location.href='nextpage.html'">View Timetable</button>
+        </div>
+        
+        <h2>All Available Slots</h2>
+        
+        <div id="slotBreakdowns"></div>
+    </div>
+    
+    <script src="timetable.js"></script>
+    <script src="slot-utils.js"></script>
+    <script>
+        // Check if timetable.js loaded properly
+        document.addEventListener("DOMContentLoaded", () => {
+            if (typeof timetableData === 'undefined') {
+                alert("Warning: timetable.js did not load properly. Please refresh the page.");
+            }
+            if (typeof breakdownSlot === 'undefined') {
+                alert("Warning: slot-utils.js did not load properly. Please refresh the page.");
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            displayAllSlots();
+        });
+        
+        // Sample slot types to show breakdowns for
+        const slotTypes = [
+            { name: "2.0 Credits (Single Slot)", examples: ["A1", "B2", "C1", "D2", "E1", "F2", "G1"] },
+            { name: "3.0 Credits (Double Slot)", examples: ["A1+TA1", "B1+TB1", "C1+TC1", "D1+TD1", "E1+TE1", "F1+TF1", "G1+TG1"] },
+            { name: "4.0 Credits (Triple Slot)", examples: ["A1+TA1+TAA1", "B1+TB1+TBB1", "C1+TC1+TCC1", "D1+TD1+TDD1", "E1+TE1+TEE1"] },
+            { name: "Lab Slots", examples: ["L2+L3", "L4+L5", "L8+L9", "L10+L11", "L14+L15", "L16+L17"] }
+        ];
+        
+        function displayAllSlots() {
+            const container = document.getElementById("slotBreakdowns");
+            container.innerHTML = "";
+            
+            slotTypes.forEach(type => {
+                const section = document.createElement("div");
+                section.className = "breakdown-section";
+                
+                const heading = document.createElement("h3");
+                heading.textContent = type.name;
+                section.appendChild(heading);
+                
+                type.examples.forEach(slot => {
+                    const slotDiv = document.createElement("div");
+                    slotDiv.style.margin = "15px 0";
+                    
+                    const slotHeading = document.createElement("h4");
+                    slotHeading.innerHTML = `Slot: <span class="slot-chip">${slot}</span>`;
+                    slotDiv.appendChild(slotHeading);
+                    
+                    const componentsDiv = document.createElement("div");
+                    componentsDiv.style.margin = "10px 0";
+                    componentsDiv.innerHTML = "<strong>Components:</strong> ";
+                    
+                    const components = breakdownSlot(slot);
+                    components.forEach(component => {
+                        const componentSpan = document.createElement("span");
+                        componentSpan.className = "component-item";
+                        componentSpan.textContent = component;
+                        componentsDiv.appendChild(componentSpan);
+                    });
+                    slotDiv.appendChild(componentsDiv);
+                    
+                    // Show where this slot appears in the timetable
+                    const occurrencesDiv = document.createElement("div");
+                    occurrencesDiv.innerHTML = "<strong>Occurrences in Timetable:</strong>";
+                    
+                    components.forEach(component => {
+                        const matches = findMatchingSlots(component);
+                        if (matches.length > 0) {
+                            const matchList = document.createElement("ul");
+                            matches.forEach(match => {
+                                const listItem = document.createElement("li");
+                                listItem.textContent = `${match.day} (${match.time}) - ${match.type}`;
+                                matchList.appendChild(listItem);
+                            });
+                            occurrencesDiv.appendChild(matchList);
+                        }
+                    });
+                    
+                    slotDiv.appendChild(occurrencesDiv);
+                    section.appendChild(slotDiv);
+                    
+                    // Add a divider
+                    if (type.examples.indexOf(slot) < type.examples.length - 1) {
+                        const divider = document.createElement("hr");
+                        section.appendChild(divider);
+                    }
+                });
+                
+                container.appendChild(section);
+            });
+        }
+        
+        function searchSlot() {
+            const searchTerm = document.getElementById("slotSearch").value.trim().toUpperCase();
+            if (!searchTerm) return;
+            
+            const resultsDiv = document.getElementById("searchResults");
+            resultsDiv.innerHTML = "";
+            
+            // Look for slots that contain the search term
+            let foundSlots = [];
+            
+            // Check in all slot types
+            slotTypes.forEach(type => {
+                type.examples.forEach(slot => {
+                    if (slot.includes(searchTerm)) {
+                        foundSlots.push(slot);
+                    } else {
+                        // Check if any component matches
+                        const components = breakdownSlot(slot);
+                        if (components.some(comp => comp === searchTerm)) {
+                            foundSlots.push(slot);
+                        }
+                    }
+                });
+            });
+            
+            if (foundSlots.length > 0) {
+                const heading = document.createElement("h3");
+                heading.textContent = `Search Results for "${searchTerm}"`;
+                resultsDiv.appendChild(heading);
+                
+                const section = document.createElement("div");
+                section.className = "breakdown-section";
+                
+                foundSlots.forEach(slot => {
+                    const slotDiv = document.createElement("div");
+                    slotDiv.style.margin = "15px 0";
+                    
+                    const slotHeading = document.createElement("h4");
+                    slotHeading.innerHTML = `Slot: <span class="slot-chip">${slot}</span>`;
+                    slotDiv.appendChild(slotHeading);
+                    
+                    const componentsDiv = document.createElement("div");
+                    componentsDiv.style.margin = "10px 0";
+                    componentsDiv.innerHTML = "<strong>Components:</strong> ";
+                    
+                    const components = breakdownSlot(slot);
+                    components.forEach(component => {
+                        const componentSpan = document.createElement("span");
+                        componentSpan.className = "component-item";
+                        componentSpan.textContent = component;
+                        if (component === searchTerm) {
+                            componentSpan.style.backgroundColor = "#e74c3c"; // Highlight the matching component
+                        }
+                        componentsDiv.appendChild(componentSpan);
+                    });
+                    slotDiv.appendChild(componentsDiv);
+                    
+                    // Show timetable occurrences
+                    const occurrencesDiv = document.createElement("div");
+                    occurrencesDiv.innerHTML = "<strong>Occurrences in Timetable:</strong>";
+                    
+                    let allMatches = [];
+                    components.forEach(component => {
+                        const matches = findMatchingSlots(component);
+                        allMatches = [...allMatches, ...matches];
+                    });
+                    
+                    if (allMatches.length > 0) {
+                        const matchTable = document.createElement("table");
+                        matchTable.style.marginTop = "10px";
+                        
+                        // Table header
+                        const headerRow = document.createElement("tr");
+                        ["Day", "Time", "Type", "Slot"].forEach(header => {
+                            const th = document.createElement("th");
+                            th.textContent = header;
+                            headerRow.appendChild(th);
+                        });
+                        matchTable.appendChild(headerRow);
+                        
+                        // Table rows
+                        allMatches.forEach(match => {
+                            const row = document.createElement("tr");
+                            
+                            const dayCell = document.createElement("td");
+                            dayCell.textContent = match.day;
+                            row.appendChild(dayCell);
+                            
+                            const timeCell = document.createElement("td");
+                            timeCell.textContent = match.time;
+                            row.appendChild(timeCell);
+                            
+                            const typeCell = document.createElement("td");
+                            typeCell.textContent = match.type;
+                            row.appendChild(typeCell);
+                            
+                            const slotCell = document.createElement("td");
+                            slotCell.textContent = match.slot;
+                            row.appendChild(slotCell);
+                            
+                            matchTable.appendChild(row);
+                        });
+                        
+                        occurrencesDiv.appendChild(matchTable);
+                    } else {
+                        occurrencesDiv.innerHTML += "<p>No occurrences found in timetable</p>";
+                    }
+                    
+                    slotDiv.appendChild(occurrencesDiv);
+                    section.appendChild(slotDiv);
+                    
+                    if (foundSlots.indexOf(slot) < foundSlots.length - 1) {
+                        const divider = document.createElement("hr");
+                        section.appendChild(divider);
+                    }
+                });
+                
+                resultsDiv.appendChild(section);
+            } else {
+                resultsDiv.innerHTML = `<h3>No results found for "${searchTerm}"</h3>`;
+            }
+        }
+    </script>
+</body>
+</html>

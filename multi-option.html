@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Course Selection - VIT FFCS</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>VIT - FFCS Course Selection Form</h2>
+
+  <div id="course-container">
+    <div class="course-block" id="CourseSlot1">
+      <div class="container">
+
+        <p id="SerialNo1" class="serial-number">1</p>
+
+        <div class="container1">
+          <label for="CCode1">Course Code</label>
+          <input type="text" id="CCode1" placeholder="e.g. CSE2001" onblur="validateCCode('CCode1', 'CCodeError1')" />
+          <p id="CCodeError1" class="error-msg"></p>
+        </div>
+
+        <div class="container1">
+          <label for="credits1">Course Credits</label>
+          <select id="credits1" onchange="updateSlotOptions(this, 1)">
+            <option value="--">-- Select --</option>
+            <option value="2.0 0.0 0.0">2.0 0.0 0.0</option>
+            <option value="2.0 1.0 0.0">2.0 1.0 0.0</option>
+            <option value="2.0 0.0 1.0">2.0 0.0 1.0</option>
+            <option value="3.0 0.0 0.0">3.0 0.0 0.0</option>
+            <option value="3.0 1.0 0.0">3.0 1.0 0.0</option>
+            <option value="3.0 0.0 1.0">3.0 0.0 1.0</option>
+            <option value="4.0 0.0 0.0">4.0 0.0 0.0</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size: 15px;">Slots</label>
+          <div class="multiselect-dropdown" onclick="toggleDropdown(this)">
+            <i class="fa-solid fa-chevron-down icon"></i>
+            <div class="selectedList-container" id="selectedList-container1"></div>
+            <ul class="menu"></ul>
+          </div>
+        </div>
+
+        <button class="delete-btn" onclick="deleteBlock(this)" id="DeleteBtn1">Delete</button>
+      </div>
+    </div>
+  </div>
+  <div id="limitModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+      <p>You can add a maximum of 10 course blocks.</p>
+      <button onclick="closeLimitModal()">OK</button>
+    </div>
+  </div>
+  <div id="modalBox" class="modal">
+  <div class="modal-content">
+    <p id="modalText"></p>
+    <button onclick="closeModal()">OK</button>
+  </div>
+</div>
+    <div id="custom-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:999;">
+      <div style="background:white; padding:30px; border-radius:10px; max-width:400px; text-align:center;">
+        <p id="modal-text"></p>
+        <button onclick="document.getElementById('custom-modal').style.display='none'" style="margin-top:15px;">OK</button>
+      </div>
+    </div>
+
+
+  <div style="display:flex; justify-content: center; align-items: center; margin-top: 20px;">
+    <button onclick="CoursePageAdder()">Add</button>
+    <a href="instruction.html"><button style="margin-left: 40px;">Back</button></a>
+    <button style="margin-left:40px;" onclick="validateForm()"> Proceed</button>
+  </div>
+
+  <script src="function.js"></script>
+</body>
+</html>

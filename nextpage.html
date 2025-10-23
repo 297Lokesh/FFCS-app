@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Timetable Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header, section {
+            margin-bottom: 30px;
+        }
+        .buttons-container, .actions {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .timetable-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .timetable-container th, .timetable-container td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .tab-btn {
+            margin: 5px;
+        }
+        .course-selection {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        #output-container {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-item"><strong>Name:</strong> <span id="nav-name">Loading...</span></div>
+        <div class="navbar-item"><strong>Reg No:</strong> <span id="nav-reg">Loading...</span></div>
+        <div class="navbar-item"><strong>Branch:</strong> <span id="nav-branch">Loading...</span></div>
+    </div>
+    <div class="container">
+        <header>
+            <h1>Course Timetable Generator</h1>
+            <p>Select theory and lab slots for your courses to generate a weekly timetable</p>
+        </header>
+
+        <section class="course-selection">
+            <h2>Course Selection</h2>
+            <div id="courses-container"></div>
+            <div class="actions">
+                <button id="generate-btn" class="btn primary">Generate Timetable</button>
+                <button onclick="resetTimetable()" class="btn primary">Reset Timetable</button>
+                <button onclick="window.location.href='timetable-editor.html'" class="btn primary">Go to Timetable Editor</button>
+                
+            </div>
+            <!-- Add this button to your navigation buttons section in timetable.html -->
+
+        </section>
+
+        <div id="error-container" class="error-container hidden"></div>
+
+        <div id="output-container"></div>
+        <!-- STEP 1: Legend container -->
+        <!-- Add this inside the body, before the timetable-section -->
+        
+        <!-- 🔻 Add this somewhere in your timetable.html (or output section) -->
+        <!-- ✅ Add this near timetable-section or wherever you want the summary -->
+        
+        <div id="capture-area">
+            <div id="selected-courses-summary" style="margin: 30px 0;">
+            <h2>Selected Courses Summary</h2>
+            <table id="selected-courses-table" border="1" style="width: 100%; border-collapse: collapse; text-align: center;">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Course Code</th>
+                        <th>Theory Slot</th>
+                        <th>Lab Slot</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- JavaScript will populate this -->
+                </tbody>
+            </table>
+                </div>
+
+
+
+                <section id="timetable-section" class="hidden">
+                    <h2>Your Weekly Timetable</h2>
+                    <div class="tabs">
+                        <button class="tab-btn active" data-day="all">Full Week</button>
+                        
+                    </div>
+                    <div class="timetable-container">
+                        <table id="timetable"></table>
+                    </div>
+                    <div class="actions mt-20">
+                        <button id="save-image-btn" class="btn primary">Save Timetable as Image</button>
+                        <button id="back-to-selection-btn" class="btn outline">Back to Course Selection</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    
+    
+
+    <script>
+    // Add this script at the end of your HTML file, just before closing body tag
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wait for the "Generate Timetable" button click event
+        const generateBtn = document.querySelector('.generate-btn');
+        if (generateBtn) {
+            // Store original onclick handler
+            const originalOnClick = generateBtn.onclick;
+            
+            // Override the onclick handler
+            generateBtn.onclick = function(event) {
+                // Call the original handler if it exists
+                if (originalOnClick) {
+                    originalOnClick.call(this, event);
+                }
+                
+                // Add our custom logic after the original handler
+                setTimeout(function() {
+                    const errorContainer = document.getElementById('error-container');
+                    const timetableSection = document.getElementById('timetable-section');
+                    
+                    // Hide timetable if there are conflicts (error container is visible)
+                    if (!errorContainer.classList.contains('hidden')) {
+                        timetableSection.classList.add('hidden');
+                    }
+                    
+                    // Only show timetable if no conflicts
+                    else {
+                        addLegendAndColors();
+                        timetableSection.classList.remove('hidden');
+                    }
+                }, 100); // Short delay to ensure the original handler has completed
+            };
+        }
+        
+        function addLegendAndColors() {
+            // Get the legend container or create one if it doesn't exist
+            let legendContainer = document.getElementById('legend-container');
+            if (!legendContainer) {
+                legendContainer = document.createElement('div');
+                legendContainer.id = 'legend-container';
+                const timetableSection = document.getElementById('timetable-section');
+                timetableSection.parentNode.insertBefore(legendContainer, timetableSection);
+            }
+            
+            // Define course colors
+            const colors = [
+                "#3498db", "#e74c3c", "#2ecc71", "#f39c12", "#9b59b6", 
+                "#1abc9c", "#d35400", "#34495e", "#16a085", "#c0392b",
+                "#8e44ad", "#27ae60", "#e67e22", "#2980b9", "#f1c40f"
+            ];
+            
+            // Collect selected courses
+            const selectedCourses = [];
+            document.querySelectorAll('.course-card').forEach((card, index) => {
+                const codeElement = card.querySelector('.course-code');
+                if (!codeElement) return;
+                
+                const code = codeElement.textContent;
+                const theorySelect = card.querySelector('.theory-select');
+                const labSelect = card.querySelector('.lab-select');
+                
+                const theorySlot = theorySelect && !theorySelect.disabled ? theorySelect.value : '';
+                const labSlot = labSelect && !labSelect.disabled ? labSelect.value : '';
+                
+                if (theorySlot || labSlot) {
+                    selectedCourses.push({
+                        code: code,
+                        theorySlot: theorySlot,
+                        labSlot: labSlot
+                    });
+                }
+            });
+            
+            // Create legend HTML
+            let legendHTML = `
+                <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 8px; border: 1px solid #dee2e6;">
+                    <div style="font-weight: bold; margin-bottom: 12px; font-size: 16px;">Course Legend:</div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+            `;
+            
+            // Add entries to legend and color the corresponding course tags
+            selectedCourses.forEach((course, index) => {
+                const color = colors[index % colors.length];
+                
+                legendHTML += `
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <span style="width: 15px; height: 15px; border-radius: 50%; background-color: ${color}; margin-right: 8px; display: inline-block;"></span>
+                        <span><b><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi>c</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>s</mi><mi>e</mi><mi mathvariant="normal">.</mi><mi>c</mi><mi>o</mi><mi>d</mi><mi>e</mi></mrow><mo>&lt;</mo><mi mathvariant="normal">/</mi><mi>b</mi><mo>&gt;</mo><mo>−</mo></mrow><annotation encoding="application/x-tex">{course.code}&lt;/b&gt; - </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.0391em;"></span><span class="mord"><span class="mord mathnormal">co</span><span class="mord mathnormal">u</span><span class="mord mathnormal">rse</span><span class="mord">.</span><span class="mord mathnormal">co</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">/</span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord">−</span></span></span></span>{course.theorySlot || ''} ${course.labSlot ? '/ ' + course.labSlot : ''}</span>
+                    </div>
+                `;
+                
+                // Apply the color to all course tags with this course code
+                document.querySelectorAll('.course-tag').forEach(tag => {
+                    if (tag.textContent.includes(course.code)) {
+                        tag.style.backgroundColor = color;
+                    }
+                });
+            });
+            
+            legendHTML += `
+                    </div>
+                </div>
+            `;
+            
+            // Add legend to the page
+            legendContainer.innerHTML = legendHTML;
+        }
+    });
+    </script>
+
+
+    <script src="nextpage.js"></script>
+</body>
+</html>

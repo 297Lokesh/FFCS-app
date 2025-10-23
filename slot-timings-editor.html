@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Timings Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="timetable.css">
+    <style>
+        .editor-section, .preview-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-select, .form-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .form-help {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+        }
+        
+        .slot-type-selection {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .slot-type-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            background-color: #eaeaea;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .slot-type-btn.active {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        .slot-timing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .slot-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .slot-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .time-input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+        }
+        
+        .time-input-group label {
+            min-width: 50px;
+        }
+        
+        .time-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .days-selection {
+            margin-top: 15px;
+        }
+        
+        .days-selection label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .slot-types-container {
+            margin-top: 20px;
+        }
+        
+        .slot-type-content {
+            display: none;
+        }
+        
+        .slot-type-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navbar -->
+    <div class="navbar">
+        <div class="navbar-item"><strong>Name:</strong> <span id="nav-name">Admin</span></div>
+        <div class="navbar-item"><strong>Reg No:</strong> <span id="nav-reg">Admin</span></div>
+        <div class="navbar-item"><strong>Branch:</strong> <span id="nav-branch">Admin</span></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Slot Timings Editor</h1>
+            <p>Manage the time schedules for different slot types (A1-G2, TA1-TG2, etc.)</p>
+        </header>
+        
+        <!-- Slot Timings Editor Form -->
+        <section class="editor-section">
+            <h2>Edit Slot Timings</h2>
+            
+            <div class="slot-type-selection">
+                <button class="slot-type-btn active" data-type="theory">Theory Slots</button>
+                <button class="slot-type-btn" data-type="tutorial">Tutorial Slots</button>
+                <button class="slot-type-btn" data-type="lab">Lab Slots</button>
+            </div>
+            
+            <div class="slot-types-container">
+                <!-- Theory Slots (A1-G2) -->
+                <div class="slot-type-content active" id="theory-slots">
+                    <h3>Theory Slots (A1-G2)</h3>
+                    <div class="slot-timing-container" id="theory-slots-container">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Tutorial Slots (TA1-TG2) -->
+                <div class="slot-type-content" id="tutorial-slots">
+                    <h3>Tutorial Slots (TA1-TG2, TAA1-TGG2)</h3>
+                    <div class="slot-timing-container" id="tutorial-slots-container">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Lab Slots (L1-L60) -->
+                <div class="slot-type-content" id="lab-slots">
+                    <h3>Lab Slots (L1-L60)</h3>
+                    <div class="slot-timing-container" id="lab-slots-container">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button id="save-all-timings-btn" class="btn primary">Save All Timings</button>
+                <button id="reset-timings-btn" class="btn danger">Reset to Defaults</button>
+            </div>
+        </section>
+        
+        <!-- Preview Section -->
+        <section class="preview-section">
+            <h2>Slot Allocation Preview</h2>
+            <p>This shows the current allocation of slots across all days of the week</p>
+            <div class="timetable-container">
+                <table id="timetable" class="timetable">
+                    <!-- Will be populated by JavaScript -->
+                </table>
+            </div>
+        </section>
+        
+        <div class="navigation-buttons">
+            <button class="btn outline" onclick="window.location.href='timetable-editor.html'">Back to Slot Editor</button>
+            <button class="btn outline" onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+
+    <script src="slot-timings-editor.js"></script>
+</body>
+</html>
